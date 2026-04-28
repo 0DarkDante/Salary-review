@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Перегляд цінності — Trident Media</title>
+<link rel="icon" type="image/x-icon" href="favicons/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
+<meta name="theme-color" content="#0A0A0B">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          inter: ['Inter', 'system-ui', 'sans-serif'],
+        },
+        colors: {
+          lime: {
+            brand: '#C5F542',
+            soft: '#D9FA6E',
+            deep: '#A8E018',
+          },
+          ink: {
+            900: '#0A0A0B',
+            800: '#101013',
+            700: '#16161A',
+            600: '#1E1E24',
+          },
+        },
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --lime: #C5F542;
+    --lime-soft: #D9FA6E;
+    --lime-deep: #A8E018;
+    --violet: #7C5CFF;
+    --blue: #5AC8FA;
+  }
+  * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html { scroll-behavior: smooth; overflow-x: hidden; scrollbar-width: none; -ms-overflow-style: none; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0A0A0B;
+    color: #fff;
+    overflow-x: hidden;
+    letter-spacing: -0.01em;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+  /* Background ambient gradients */
+  .ambient {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(60% 50% at 80% 0%, rgba(197, 245, 66, 0.10) 0%, transparent 60%),
+      radial-gradient(50% 40% at 0% 30%, rgba(124, 92, 255, 0.10) 0%, transparent 60%),
+      radial-gradient(40% 30% at 50% 100%, rgba(197, 245, 66, 0.08) 0%, transparent 60%);
+  }
+  .grain::after {
+    content: ""; position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+    opacity: 0.04; mix-blend-mode: overlay;
+  }
+
+  /* Glass card */
+  .glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+  .glass-strong {
+    background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(24px) saturate(160%);
+  }
+
+  /* Headline gradient */
+  .text-gradient {
+    background: linear-gradient(180deg, #ffffff 0%, #b8b8c0 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .text-lime {
+    background: linear-gradient(135deg, #D9FA6E 0%, #C5F542 50%, #A8E018 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    background: linear-gradient(135deg, #D9FA6E 0%, #C5F542 100%);
+    color: #0A0A0B;
+    box-shadow: 0 8px 32px rgba(197, 245, 66, 0.25), inset 0 1px 0 rgba(255,255,255,0.4);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), box-shadow .3s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(197, 245, 66, 0.40), inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+  .btn-ghost {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    transition: all .3s;
+  }
+  .btn-ghost:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.20);
+  }
+
+  /* Reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: .08s; }
+  .reveal-delay-2 { transition-delay: .16s; }
+  .reveal-delay-3 { transition-delay: .24s; }
+  .reveal-delay-4 { transition-delay: .32s; }
+
+  /* Hero portrait frame */
+  .portrait-frame {
+    position: relative;
+    border-radius: 32px;
+    overflow: hidden;
+    background: #C5F542;
+    box-shadow:
+      0 30px 80px -20px rgba(197, 245, 66, 0.35),
+      0 10px 30px -10px rgba(0,0,0,0.6);
+  }
+  .portrait-frame::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.10) 50%, transparent 100%);
+    z-index: 2; pointer-events: none;
+  }
+  .trident-strip {
+    position: absolute;
+    left: -10%; right: -10%;
+    background: #fff;
+    color: #0A0A0B;
+    font-weight: 900;
+    font-style: italic;
+    letter-spacing: -0.02em;
+    text-align: center;
+    transform: rotate(-12deg);
+    z-index: 1;
+  }
+  .trident-strip.s1 { top: 28%; padding: 14px 0; font-size: clamp(28px, 5vw, 56px); }
+  .trident-strip.s2 { top: 50%; padding: 14px 0; font-size: clamp(28px, 5vw, 56px); background: #0A0A0B; color: #C5F542; }
+
+  /* Counter glow */
+  .counter {
+    text-shadow: 0 0 60px rgba(197, 245, 66, 0.25);
+  }
+
+  /* Marquee badge */
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 999px;
+    background: rgba(197, 245, 66, 0.08);
+    border: 1px solid rgba(197, 245, 66, 0.20);
+    color: #D9FA6E;
+    font-size: 13px; font-weight: 500;
+  }
+  .pill-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #C5F542;
+    box-shadow: 0 0 10px #C5F542;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  /* Bar chart */
+  .bar {
+    height: 100%;
+    border-radius: 12px 12px 4px 4px;
+    background: linear-gradient(180deg, #D9FA6E 0%, #A8E018 100%);
+    box-shadow: 0 -10px 30px rgba(197, 245, 66, 0.3);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 1.4s cubic-bezier(.2,.8,.2,1);
+  }
+  .bar.was {
+    background: linear-gradient(180deg, #2a2a30 0%, #1a1a20 100%);
+    box-shadow: none;
+  }
+  .bar.in { transform: scaleY(1); }
+
+  /* Section divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent);
+  }
+
+  /* Scrollbars hidden */
+  ::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+  /* Floating glow orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+    opacity: 0.5;
+    animation: float 12s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -40px); }
+  }
+
+  /* Logo */
+  .header-logo-img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 0 18px rgba(197,245,66,0.20));
+  }
+  .footer-logo-img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 0 14px rgba(197,245,66,0.18));
+  }
+  .logo-mark {
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    font-style: italic;
+  }
+
+  /* Sticky nav blur */
+  .nav-blur {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(10, 10, 11, 0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Quote */
+  .quote-mark {
+    font-family: Georgia, serif;
+    font-size: 120px;
+    line-height: 1;
+    color: rgba(197, 245, 66, 0.20);
+  }
+
+  /* Progress line */
+  .scroll-progress { display: none; }
+
+  /* Mobile navigation + responsive polish */
+  .mobile-menu-btn {
+    display: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.05);
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: transform .25s ease, background .25s ease, border-color .25s ease;
+  }
+  .mobile-menu-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(197,245,66,0.35); }
+  .mobile-menu-btn span {
+    position: absolute;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: #fff;
+    transition: transform .28s ease, opacity .2s ease, top .28s ease;
+  }
+  .mobile-menu-btn span:nth-child(1) { top: 15px; }
+  .mobile-menu-btn span:nth-child(2) { top: 21px; }
+  .mobile-menu-btn span:nth-child(3) { top: 27px; }
+  .mobile-menu-btn.active span:nth-child(1) { top: 21px; transform: rotate(45deg); }
+  .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+  .mobile-menu-btn.active span:nth-child(3) { top: 21px; transform: rotate(-45deg); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 64px 12px auto 12px;
+    z-index: 45;
+    border-radius: 28px;
+    padding: 14px;
+    background:
+      radial-gradient(80% 70% at 100% 0%, rgba(197,245,66,0.16), transparent 60%),
+      rgba(16,16,19,0.92);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+    backdrop-filter: blur(26px) saturate(160%);
+    -webkit-backdrop-filter: blur(26px) saturate(160%);
+    transform: translateY(-12px) scale(.98);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease, transform .25s ease;
+  }
+  .mobile-menu.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .mobile-menu a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 14px;
+    border-radius: 18px;
+    color: rgba(255,255,255,.78);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .mobile-menu a:hover {
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    transform: translateX(2px);
+  }
+  .mobile-menu a::after {
+    content: "→";
+    color: var(--lime);
+    opacity: .7;
+  }
+  .mobile-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0,0,0,.38);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+  }
+  .mobile-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  body.menu-open { overflow: hidden; }
+
+  @media (max-width: 767px) {
+    .mobile-menu-btn,
+    .mobile-menu,
+    .mobile-backdrop { display: flex; }
+    .mobile-menu { flex-direction: column; }
+    nav .max-w-7xl { height: 64px; padding-left: 16px; padding-right: 16px; }
+    nav .logo-mark.text-white { font-size: 12px; }
+    .header-logo-img { width: 38px; height: 38px; }
+    nav a.btn-ghost { display: none; }
+
+    section { padding-left: 18px !important; padding-right: 18px !important; }
+    .pill { font-size: 12px; padding: 7px 12px; }
+    h1 { font-size: clamp(40px, 12vw, 56px) !important; line-height: 0.98 !important; }
+    .portrait-frame { border-radius: 26px; max-width: 335px; margin-inline: auto; }
+    .orb { filter: blur(48px); opacity: .35; }
+    .glass, .glass-strong { border-radius: 24px !important; }
+    .reveal { transform: translateY(18px); }
+    .btn-primary, .btn-ghost {
+      width: 100%;
+      justify-content: center;
+      padding: 15px 20px;
+    }
+    .counter { font-size: clamp(28px, 8vw, 36px) !important; }
+    footer .max-w-7xl { align-items: flex-start; }
+  }
+
+  @media (max-width: 480px) {
+    .mobile-menu { inset-left: 10px; inset-right: 10px; border-radius: 24px; }
+    .reveal.reveal-delay-4.grid,
+    .grid.grid-cols-3 { gap: 12px; }
+    .reveal.reveal-delay-4.grid > div {
+      padding: 14px 10px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+  }
+
+</style>
+</head>
+<body class="font-inter grain">
+
+<div class="scroll-progress" id="progress"></div>
+<div class="ambient"></div>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 nav-blur">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
+    <a href="https://trident-media.agency/" target="_blank" class="flex items-center gap-3" aria-label="Trident Media">
+      <img src="favicons/favicon.png" alt="Trident Media logo" class="header-logo-img" />
+      <span class="logo-mark text-white text-sm tracking-wide">TRIDENT MEDIA</span>
+    </a>
+    <div class="hidden md:flex items-center gap-8 text-sm text-white/60">
+      <a href="#metrics" class="hover:text-white transition">Метрики</a>
+      <a href="#impact" class="hover:text-white transition">Вплив</a>
+      <a href="#case" class="hover:text-white transition">Кейс</a>
+      <a href="#future" class="hover:text-white transition">Майбутнє</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="#cta" class="btn-ghost px-4 py-2 rounded-full text-sm text-white">Обговорити</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Відкрити меню" aria-controls="mobileMenu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<div class="mobile-backdrop" id="mobileBackdrop"></div>
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <a href="#metrics">Метрики</a>
+  <a href="#impact">Вплив</a>
+  <a href="#case">Кейс</a>
+  <a href="#future">Майбутнє</a>
+  <a href="#cta">Обговорити</a>
+</div>
+
+<!-- HERO -->
+<section class="relative min-h-screen flex items-center pt-28 pb-20 px-6 lg:px-10 z-10">
+  <div class="orb" style="width: 480px; height: 480px; background: #C5F542; top: -10%; right: -10%;"></div>
+  <div class="orb" style="width: 380px; height: 380px; background: #7C5CFF; bottom: -10%; left: -10%; animation-delay: -4s;"></div>
+
+  <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-12 gap-12 lg:gap-16 items-center relative">
+    <div class="lg:col-span-7">
+      <div class="reveal">
+        <span class="pill"><span class="pill-dot"></span> Внутрішній меморандум · Q2 2026</span>
+      </div>
+
+      <h1 class="reveal reveal-delay-1 mt-8 text-[44px] sm:text-6xl lg:text-7xl xl:text-[88px] font-bold leading-[1.02] tracking-tight">
+        <span class="text-gradient">Зростання продуктивності.</span><br/>
+        <span class="text-lime">Зростання цінності.</span>
+      </h1>
+
+      <p class="reveal reveal-delay-2 mt-8 text-lg lg:text-xl text-white/60 max-w-2xl leading-relaxed">
+        Стабільне підвищення швидкості та якості випуску сайтів у 2–3 рази, посилення команди та готовність брати відповідальність за результат — підстава для перегляду умов співпраці.
+      </p>
+
+      <div class="reveal reveal-delay-3 mt-12 flex flex-wrap gap-4">
+        <a href="#metrics" class="btn-primary px-8 py-4 rounded-full font-semibold text-[15px] inline-flex items-center gap-2">
+          Переглянути результати
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#cta" class="btn-ghost px-8 py-4 rounded-full font-medium text-[15px] text-white inline-flex items-center gap-2">
+          Перейти до пропозиції
+        </a>
+      </div>
+
+      <div class="reveal reveal-delay-4 mt-16 grid grid-cols-3 gap-6 max-w-lg">
+        <div>
+          <div class="text-3xl lg:text-4xl font-bold text-lime counter">×2.5</div>
+          <div class="text-xs text-white/50 mt-1">зростання обсягу</div>
+        </div>
+        <div>
+          <div class="text-3xl lg:text-4xl font-bold text-lime counter">15</div>
+          <div class="text-xs text-white/50 mt-1">сайтів макс. / день</div>
+        </div>
+        <div>
+          <div class="text-3xl lg:text-4xl font-bold text-lime counter">0</div>
+          <div class="text-xs text-white/50 mt-1">зривів дедлайнів</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-5 reveal reveal-delay-2">
+      <div class="relative max-w-md mx-auto pb-10">
+        <!-- Portrait — фото вже містить фірмові смуги TRIDENT, синтетичні шари прибрано -->
+        <div class="portrait-frame aspect-square">
+          <img src="image/portrait.jpg"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+               alt="Portrait"
+               class="w-full h-full object-cover relative z-0" />
+          <div style="display:none;" class="w-full h-full absolute inset-0 z-0 items-end justify-center bg-gradient-to-b from-lime-soft to-lime-deep">
+            <div class="w-3/4 h-3/4 rounded-t-full bg-ink-900/80 mb-0"></div>
+          </div>
+        </div>
+
+        <!-- Floating stat card (нижній лівий) -->
+        <div class="absolute left-2 -bottom-2 glass-strong rounded-2xl p-4 w-52 hidden sm:block">
+          <div class="text-[10px] text-white/50 uppercase tracking-wider">Поточний темп</div>
+          <div class="mt-1 flex items-baseline gap-1">
+            <span class="text-2xl font-bold text-white">9–12</span>
+            <span class="text-xs text-white/60">сайтів / день</span>
+          </div>
+          <div class="mt-2 h-1.5 bg-white/10 rounded-full overflow-hidden">
+            <div class="h-full w-[85%]" style="background: linear-gradient(90deg, #D9FA6E, #C5F542);"></div>
+          </div>
+        </div>
+
+        <!-- Floating quality card (нижній правий, в межах рамки) -->
+        <div class="absolute right-2 -bottom-2 glass-strong rounded-full px-4 py-2.5 hidden sm:flex items-center gap-2">
+          <div class="w-2 h-2 rounded-full bg-lime-brand pill-dot"></div>
+          <span class="text-xs text-white/80 whitespace-nowrap">Якість стабільна</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider max-w-7xl mx-auto"></div>
+
+<!-- VALUE PROPOSITION -->
+<section class="relative py-24 lg:py-32 px-6 lg:px-10 z-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="reveal max-w-3xl mb-16 lg:mb-20">
+      <div class="text-sm uppercase tracking-[0.3em] text-lime-brand mb-4">01 — Цінність</div>
+      <h2 class="text-4xl lg:text-6xl font-bold text-gradient leading-[1.05] tracking-tight">
+        Чотири якості, на які можна покластися щодня.
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="reveal glass rounded-3xl p-7 hover:border-white/20 transition-all duration-500">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style="background: rgba(197, 245, 66, 0.10); border: 1px solid rgba(197, 245, 66, 0.25);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Висока швидкість</h3>
+        <p class="text-white/55 text-sm leading-relaxed">У 2–3 рази більший випуск сайтів без втрати якості. Стабільний ритм навіть під навантаженням.</p>
+      </div>
+
+      <div class="reveal reveal-delay-1 glass rounded-3xl p-7 hover:border-white/20 transition-all duration-500">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style="background: rgba(197, 245, 66, 0.10); border: 1px solid rgba(197, 245, 66, 0.25);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Надійність</h3>
+        <p class="text-white/55 text-sm leading-relaxed">Дедлайни витримуються. Запуски не зриваються. Команда та баєри впевнені у результаті.</p>
+      </div>
+
+      <div class="reveal reveal-delay-2 glass rounded-3xl p-7 hover:border-white/20 transition-all duration-500">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style="background: rgba(197, 245, 66, 0.10); border: 1px solid rgba(197, 245, 66, 0.25);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Самостійність</h3>
+        <p class="text-white/55 text-sm leading-relaxed">Беру задачі на себе, мінімум контролю та правок. Менеджмент звільнений від мікроменеджменту.</p>
+      </div>
+
+      <div class="reveal reveal-delay-3 glass rounded-3xl p-7 hover:border-white/20 transition-all duration-500">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style="background: rgba(197, 245, 66, 0.10); border: 1px solid rgba(197, 245, 66, 0.25);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-2">Якість коду</h3>
+        <p class="text-white/55 text-sm leading-relaxed">Чистий код, мінімум доопрацювань, швидкий розбір складних задач без зовнішньої допомоги.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS / PROOF -->
+<section id="metrics" class="relative py-24 lg:py-32 px-6 lg:px-10 z-10">
+  <div class="orb" style="width: 500px; height: 500px; background: #C5F542; top: 20%; left: -20%; opacity: 0.25;"></div>
+
+  <div class="max-w-7xl mx-auto">
+    <div class="reveal max-w-3xl mb-16 lg:mb-20">
+      <div class="text-sm uppercase tracking-[0.3em] text-lime-brand mb-4">02 — Метрики</div>
+      <h2 class="text-4xl lg:text-6xl font-bold text-gradient leading-[1.05] tracking-tight">
+        Цифри, які говорять самі за себе.
+      </h2>
+      <p class="mt-6 text-lg text-white/55 max-w-2xl">Динаміка випуску сайтів за робочий день — від базового рівня до поточного результату.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-6">
+      <!-- Big chart card -->
+      <div class="reveal lg:col-span-7 glass-strong rounded-3xl p-8 lg:p-10">
+        <div class="flex items-end justify-between mb-8">
+          <div>
+            <div class="text-xs uppercase tracking-wider text-white/40">Сайтів на день</div>
+            <div class="text-2xl font-semibold mt-1">Динаміка продуктивності</div>
+          </div>
+          <div class="flex gap-4 text-xs">
+            <span class="flex items-center gap-2 text-white/60"><span class="w-3 h-3 rounded-sm bg-white/20"></span> Було</span>
+            <span class="flex items-center gap-2 text-white/60"><span class="w-3 h-3 rounded-sm" style="background: linear-gradient(180deg, #D9FA6E, #A8E018);"></span> Стало</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6 lg:gap-10 h-64 items-end">
+          <div class="flex flex-col items-center gap-3 h-full">
+            <div class="text-white/60 text-sm">Раніше</div>
+            <div class="w-full flex-1 flex items-end">
+              <div class="bar was w-full" data-h="30"></div>
+            </div>
+            <div class="text-white text-2xl font-bold">4–5</div>
+          </div>
+          <div class="flex flex-col items-center gap-3 h-full">
+            <div class="text-lime-brand text-sm font-medium">Зараз</div>
+            <div class="w-full flex-1 flex items-end">
+              <div class="bar w-full" data-h="75"></div>
+            </div>
+            <div class="text-lime text-2xl font-bold">9–12</div>
+          </div>
+          <div class="flex flex-col items-center gap-3 h-full">
+            <div class="text-lime-brand text-sm font-medium">Пік / зрізані терміни</div>
+            <div class="w-full flex-1 flex items-end">
+              <div class="bar w-full" data-h="100"></div>
+            </div>
+            <div class="text-lime text-2xl font-bold">до 15</div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
+          <span class="text-sm text-white/55">Зростання обсягу робіт</span>
+          <span class="text-2xl font-bold text-lime counter" data-count="2.5" data-suffix="x">×2.5</span>
+        </div>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-6">
+        <div class="reveal reveal-delay-1 glass rounded-3xl p-8">
+          <div class="text-xs uppercase tracking-wider text-white/40">У середньому</div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-6xl font-bold text-lime counter" data-count="10">10</span>
+            <span class="text-white/50">сайтів / день</span>
+          </div>
+          <p class="mt-3 text-sm text-white/55">Стабільний робочий ритм без перерв на «розгойдування».</p>
+        </div>
+
+        <div class="reveal reveal-delay-2 glass rounded-3xl p-8">
+          <div class="text-xs uppercase tracking-wider text-white/40">Рекордний день</div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-6xl font-bold text-lime counter" data-count="15">15</span>
+            <span class="text-white/50">сайтів за зміну</span>
+          </div>
+          <p class="mt-3 text-sm text-white/55">Закриті терміни без втрати якості.</p>
+        </div>
+
+        <div class="reveal reveal-delay-3 glass rounded-3xl p-8 sm:col-span-2 lg:col-span-1">
+          <div class="text-xs uppercase tracking-wider text-white/40">Швидкі задачі</div>
+          <div class="mt-2 flex items-baseline gap-2">
+            <span class="text-6xl font-bold text-lime counter" data-count="3" data-suffix=" год">3 год</span>
+          </div>
+          <p class="mt-3 text-sm text-white/55">До 15 сайтів за 3 години в кінці дня — за потреби.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUSINESS IMPACT -->
+<section id="impact" class="relative py-24 lg:py-32 px-6 lg:px-10 z-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="reveal max-w-3xl mb-16 lg:mb-20">
+      <div class="text-sm uppercase tracking-[0.3em] text-lime-brand mb-4">03 — Вплив на бізнес</div>
+      <h2 class="text-4xl lg:text-6xl font-bold text-gradient leading-[1.05] tracking-tight">
+        Що це дає Trident Media.
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="reveal glass rounded-3xl p-8 lg:p-10">
+        <div class="flex items-start gap-5">
+          <div class="w-12 h-12 rounded-2xl flex-shrink-0 flex items-center justify-center" style="background: rgba(197, 245, 66, 0.10); border: 1px solid rgba(197, 245, 66, 0.25);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
+          <div>
+            <h3 class="text-xl lg:text-2xl font-semibold mb-2">Швидші запуски кампаній</h3>
+            <p class="text-white/55 leading-relaxed">Сайти готові тоді, коли вони потрібні баєрам. Менше очікувань — більше активних зв'язок у роботі.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-1 glass rounded-3xl p-8 lg:p-10">
+        <div class="flex items-start gap-5">
+          <div class="w-12 h-12 rounded-2xl flex-shrink-0 flex items-center justify-center" style="background: rgba(197, 245, 66, 0.10); border: 1px solid rgba(197, 245, 66, 0.25);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div>
+            <h3 class="text-xl lg:text-2xl font-semibold mb-2">Відсутність затримок</h3>
+            <p class="text-white/55 leading-relaxed">Завдання не «застрягають» на етапі розробки. Команда планує наступні кроки з впевненістю.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-2 glass rounded-3xl p-8 lg:p-10">
+        <div class="flex items-start gap-5">
+          <div class="w-12 h-12 rounded-2xl flex-shrink-0 flex items-center justify-center" style="background: rgba(197, 245, 66, 0.10); border: 1px solid rgba(197, 245, 66, 0.25);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div>
+            <h3 class="text-xl lg:text-2xl font-semibold mb-2">Економія ресурсів</h3>
+            <p class="text-white/55 leading-relaxed">Один спеціаліст закриває обсяг, на який раніше потрібно було більше людей або більше часу.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-3 glass rounded-3xl p-8 lg:p-10">
+        <div class="flex items-start gap-5">
+          <div class="w-12 h-12 rounded-2xl flex-shrink-0 flex items-center justify-center" style="background: rgba(197, 245, 66, 0.10); border: 1px solid rgba(197, 245, 66, 0.25);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
+          <div>
+            <h3 class="text-xl lg:text-2xl font-semibold mb-2">Передбачуваний результат</h3>
+            <p class="text-white/55 leading-relaxed">Менеджмент може планувати обсяги наперед, спираючись на стабільну продуктивність.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<section class="relative py-24 lg:py-32 px-6 lg:px-10 z-10">
+  <div class="max-w-5xl mx-auto">
+    <div class="reveal text-center mb-12">
+      <div class="text-sm uppercase tracking-[0.3em] text-lime-brand mb-4">04 — Зворотний зв'язок</div>
+      <h2 class="text-4xl lg:text-5xl font-bold text-gradient leading-[1.05] tracking-tight">
+        Думка тих, з ким працюю щодня.
+      </h2>
+    </div>
+
+    <div class="reveal glass-strong rounded-3xl p-10 lg:p-16 relative overflow-hidden">
+      <div class="orb" style="width: 300px; height: 300px; background: #C5F542; top: -50%; right: -10%; opacity: 0.2;"></div>
+      <div class="quote-mark relative z-10">"</div>
+      <blockquote class="relative z-10 -mt-10 text-2xl lg:text-3xl font-medium leading-snug text-white/90 max-w-3xl">
+        Відзначають швидкість, відповідальність та готовність працювати поза стандартним графіком, коли цього вимагає ситуація.
+      </blockquote>
+      <div class="relative z-10 mt-8 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, #D9FA6E, #A8E018);">
+          <span class="text-ink-900 font-bold text-sm">B</span>
+        </div>
+        <div>
+          <div class="text-sm font-medium">Баєри Trident Media</div>
+          <div class="text-xs text-white/50">внутрішній фідбек</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDY -->
+<section id="case" class="relative py-24 lg:py-32 px-6 lg:px-10 z-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="reveal max-w-3xl mb-16 lg:mb-20">
+      <div class="text-sm uppercase tracking-[0.3em] text-lime-brand mb-4">05 — Кейс</div>
+      <h2 class="text-4xl lg:text-6xl font-bold text-gradient leading-[1.05] tracking-tight">
+        Коли все горить — все одно вивожу.
+      </h2>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-6">
+      <div class="reveal lg:col-span-7 glass-strong rounded-3xl p-10 lg:p-12 relative overflow-hidden">
+        <div class="text-xs uppercase tracking-wider text-lime-brand mb-3">Ситуація</div>
+        <h3 class="text-2xl lg:text-3xl font-semibold mb-6 leading-tight">10–15 сайтів за 3 години до кінця робочого дня.</h3>
+        <p class="text-white/60 leading-relaxed mb-8">
+          Терміновий обсяг, який зазвичай розподіляється на повний робочий день. Стандартний підхід — перенести на завтра. Альтернатива — закрити в день постановки без втрати якості.
+        </p>
+
+        <div class="grid grid-cols-3 gap-4">
+          <div class="rounded-2xl bg-white/[0.03] border border-white/5 p-4">
+            <div class="text-xs text-white/45 uppercase tracking-wider">Час</div>
+            <div class="text-2xl font-bold text-white mt-1">3 год</div>
+          </div>
+          <div class="rounded-2xl bg-white/[0.03] border border-white/5 p-4">
+            <div class="text-xs text-white/45 uppercase tracking-wider">Обсяг</div>
+            <div class="text-2xl font-bold text-white mt-1">10–15</div>
+          </div>
+          <div class="rounded-2xl bg-white/[0.03] border border-white/5 p-4">
+            <div class="text-xs text-white/45 uppercase tracking-wider">Якість</div>
+            <div class="text-2xl font-bold text-lime mt-1">100%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-1 lg:col-span-5 glass rounded-3xl p-10 lg:p-12">
+        <div class="text-xs uppercase tracking-wider text-lime-brand mb-3">Результат</div>
+        <h3 class="text-2xl font-semibold mb-6 leading-tight">Запуск без переносів. Команда йде в наступний день з закритими задачами.</h3>
+
+        <ul class="space-y-4">
+          <li class="flex items-start gap-3">
+            <span class="mt-1 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center" style="background: rgba(197, 245, 66, 0.15);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="text-white/70 text-sm leading-relaxed">Жодного зриву терміну з боку розробки</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center" style="background: rgba(197, 245, 66, 0.15);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="text-white/70 text-sm leading-relaxed">Якість на рівні стандартного робочого темпу</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center" style="background: rgba(197, 245, 66, 0.15);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="text-white/70 text-sm leading-relaxed">Готовність працювати в нестандартному графіку</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1 w-5 h-5 rounded-full flex-shrink-0 flex items-center justify-center" style="background: rgba(197, 245, 66, 0.15);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="text-white/70 text-sm leading-relaxed">Команда отримує впевненість у дедлайнах</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUALITY -->
+<section class="relative py-24 lg:py-32 px-6 lg:px-10 z-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="grid lg:grid-cols-12 gap-12 items-center">
+      <div class="lg:col-span-5 reveal">
+        <div class="text-sm uppercase tracking-[0.3em] text-lime-brand mb-4">06 — Якість</div>
+        <h2 class="text-4xl lg:text-5xl font-bold text-gradient leading-[1.05] tracking-tight mb-6">
+          Швидкість без шкоди для якості.
+        </h2>
+        <p class="text-lg text-white/55 leading-relaxed">Те, що випущено швидко, не повертається на доопрацювання. Чистий код економить час команди надалі.</p>
+      </div>
+
+      <div class="lg:col-span-7 grid sm:grid-cols-2 gap-5">
+        <div class="reveal glass rounded-3xl p-7">
+          <div class="text-5xl font-bold text-lime counter mb-3" data-count="90" data-suffix="%">90%</div>
+          <div class="font-semibold text-white mb-1">Без правок</div>
+          <p class="text-sm text-white/55">Більшість задач закривається з першого разу.</p>
+        </div>
+
+        <div class="reveal reveal-delay-1 glass rounded-3xl p-7">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style="background: rgba(197, 245, 66, 0.10); border: 1px solid rgba(197, 245, 66, 0.25);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          </div>
+          <div class="font-semibold text-white mb-1 text-lg">Чистий код</div>
+          <p class="text-sm text-white/55">Структуровано, передбачувано, легко підтримувати.</p>
+        </div>
+
+        <div class="reveal reveal-delay-2 glass rounded-3xl p-7">
+          <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style="background: rgba(197, 245, 66, 0.10); border: 1px solid rgba(197, 245, 66, 0.25);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="font-semibold text-white mb-1 text-lg">Складні задачі</div>
+          <p class="text-sm text-white/55">Розбираю самостійно, без затримок процесу.</p>
+        </div>
+
+        <div class="reveal reveal-delay-3 glass rounded-3xl p-7">
+          <div class="text-5xl font-bold text-lime mb-3">↓</div>
+          <div class="font-semibold text-white mb-1">Менше повернень</div>
+          <p class="text-sm text-white/55">QA отримує матеріал, готовий до запуску.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM CONTRIBUTION -->
+<section class="relative py-24 lg:py-32 px-6 lg:px-10 z-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="reveal max-w-3xl mb-16 lg:mb-20">
+      <div class="text-sm uppercase tracking-[0.3em] text-lime-brand mb-4">07 — Внесок у команду</div>
+      <h2 class="text-4xl lg:text-6xl font-bold text-gradient leading-[1.05] tracking-tight">
+        Підсилюю не тільки свій результат.
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="reveal glass rounded-3xl p-8">
+        <div class="text-4xl font-bold text-lime mb-4">01</div>
+        <h3 class="text-lg font-semibold mb-2">Ділюся досвідом</h3>
+        <p class="text-sm text-white/55 leading-relaxed">Допомагаю колегам швидше розбиратися зі складними задачами та інструментами.</p>
+      </div>
+
+      <div class="reveal reveal-delay-1 glass rounded-3xl p-8">
+        <div class="text-4xl font-bold text-lime mb-4">02</div>
+        <h3 class="text-lg font-semibold mb-2">Пропоную покращення</h3>
+        <p class="text-sm text-white/55 leading-relaxed">Бачу, де процеси можна спростити, та виношу пропозиції на обговорення.</p>
+      </div>
+
+      <div class="reveal reveal-delay-2 glass rounded-3xl p-8">
+        <div class="text-4xl font-bold text-lime mb-4">03</div>
+        <h3 class="text-lg font-semibold mb-2">Підвищую ефективність</h3>
+        <p class="text-sm text-white/55 leading-relaxed">Темп моєї роботи задає планку та допомагає команді тримати ритм.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE GROWTH -->
+<section id="future" class="relative py-24 lg:py-32 px-6 lg:px-10 z-10">
+  <div class="orb" style="width: 500px; height: 500px; background: #7C5CFF; top: 10%; right: -15%; opacity: 0.25;"></div>
+
+  <div class="max-w-7xl mx-auto">
+    <div class="reveal max-w-3xl mb-16 lg:mb-20">
+      <div class="text-sm uppercase tracking-[0.3em] text-lime-brand mb-4">08 — Потенціал</div>
+      <h2 class="text-4xl lg:text-6xl font-bold text-gradient leading-[1.05] tracking-tight">
+        Куди можу зростати далі.
+      </h2>
+      <p class="mt-6 text-lg text-white/55 max-w-2xl">Це не межа. З правильним вектором та залученням можу давати ще більше цінності.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="reveal glass-strong rounded-3xl p-8 hover:translate-y-[-4px] transition-transform duration-500">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style="background: rgba(197, 245, 66, 0.12); border: 1px solid rgba(197, 245, 66, 0.30);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 008 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H2a2 2 0 110-4h.09A1.65 1.65 0 004.6 8a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V2a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H22a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-3">Оптимізація процесів</h3>
+        <p class="text-white/55 text-sm leading-relaxed">Шаблони, автоматизація рутини, скорочення часу на повторювані операції.</p>
+      </div>
+
+      <div class="reveal reveal-delay-1 glass-strong rounded-3xl p-8 hover:translate-y-[-4px] transition-transform duration-500">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style="background: rgba(197, 245, 66, 0.12); border: 1px solid rgba(197, 245, 66, 0.30);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-3">Зростання конверсії</h3>
+        <p class="text-white/55 text-sm leading-relaxed">Робота над структурою та технічною якістю сайтів, що впливає на результати кампаній.</p>
+      </div>
+
+      <div class="reveal reveal-delay-2 glass-strong rounded-3xl p-8 hover:translate-y-[-4px] transition-transform duration-500">
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center mb-6" style="background: rgba(197, 245, 66, 0.12); border: 1px solid rgba(197, 245, 66, 0.30);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C5F542" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+        </div>
+        <h3 class="text-xl font-semibold mb-3">Масштабування обсягу</h3>
+        <p class="text-white/55 text-sm leading-relaxed">Готовий брати більше задач та закривати ширший фронт робіт без втрати якості.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="cta" class="relative py-24 lg:py-40 px-6 lg:px-10 z-10">
+  <div class="max-w-5xl mx-auto">
+    <div class="reveal glass-strong rounded-[40px] p-10 lg:p-20 relative overflow-hidden text-center">
+      <div class="orb" style="width: 600px; height: 600px; background: #C5F542; top: -50%; left: 50%; transform: translateX(-50%); opacity: 0.18;"></div>
+
+      <div class="relative z-10">
+        <div class="pill mb-8 mx-auto">
+          <span class="pill-dot"></span> Підстава для перегляду умов
+        </div>
+
+        <h2 class="text-4xl sm:text-5xl lg:text-7xl font-bold leading-[1.02] tracking-tight">
+          <span class="text-gradient">Зросли результати.</span><br/>
+          <span class="text-lime">Час переглянути умови.</span>
+        </h2>
+
+        <p class="mt-8 text-lg lg:text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
+          Пропоную обговорити перегляд заробітної плати на основі реального зростання продуктивності, стабільної якості та внеску в роботу команди.
+        </p>
+
+        <div class="mt-12 flex flex-wrap gap-4 justify-center">
+          <a href="https://trident-media.agency/" target="_blank" class="btn-primary px-10 py-5 rounded-full font-semibold text-base inline-flex items-center gap-3">
+            Обговорити деталі
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="mt-16 pt-10 border-t border-white/10 grid grid-cols-3 gap-6 max-w-2xl mx-auto">
+          <div>
+            <div class="text-3xl font-bold text-lime">×2.5</div>
+            <div class="text-xs text-white/45 mt-1 uppercase tracking-wider">обсяг</div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold text-lime">100%</div>
+            <div class="text-xs text-white/45 mt-1 uppercase tracking-wider">дедлайни</div>
+          </div>
+          <div>
+            <div class="text-3xl font-bold text-lime">0</div>
+            <div class="text-xs text-white/45 mt-1 uppercase tracking-wider">мікроменеджмент</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="relative py-12 px-6 lg:px-10 border-t border-white/5 z-10">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <img src="favicons/favicon.png" alt="Trident Media logo" class="footer-logo-img" />
+      <span class="logo-mark text-white/80 text-xs tracking-wide">TRIDENT MEDIA · INTERNAL MEMO</span>
+    </div>
+    <div class="text-xs text-white/40">
+      <a href="https://trident-media.agency/" target="_blank" class="hover:text-white/70 transition">trident-media.agency</a>
+    </div>
+    <div class="text-xs text-white/40">
+      © 2026 · Підготовлено для перегляду умов співпраці
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll progress
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    progress.style.width = scrolled + '%';
+  });
+
+  // Reveal observer
+  const reveals = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(r => revealObs.observe(r));
+
+  // Bars animate
+  const bars = document.querySelectorAll('.bar');
+  const barObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const h = e.target.dataset.h || 100;
+        e.target.style.height = h + '%';
+        requestAnimationFrame(() => e.target.classList.add('in'));
+        barObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  bars.forEach(b => barObs.observe(b));
+
+  // Counter animation
+  const counters = document.querySelectorAll('.counter[data-count]');
+  const animateCounter = (el) => {
+    const target = parseFloat(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const isFloat = !Number.isInteger(target);
+    const duration = 1600;
+    const start = performance.now();
+    const startVal = 0;
+    const step = (now) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = startVal + (target - startVal) * eased;
+      el.textContent = (isFloat ? val.toFixed(1) : Math.round(val)) + suffix;
+      if (t < 1) requestAnimationFrame(step);
+      else el.textContent = (isFloat ? target.toFixed(1) : target) + suffix;
+    };
+    requestAnimationFrame(step);
+  };
+  const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        // Special case: ×2.5 prefix
+        if (e.target.textContent.includes('×')) {
+          const original = e.target.textContent;
+          e.target.textContent = '×0';
+          const target = parseFloat(e.target.dataset.count);
+          const duration = 1600;
+          const start = performance.now();
+          const step = (now) => {
+            const t = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - t, 3);
+            const val = target * eased;
+            e.target.textContent = '×' + val.toFixed(1);
+            if (t < 1) requestAnimationFrame(step);
+            else e.target.textContent = original;
+          };
+          requestAnimationFrame(step);
+        } else {
+          animateCounter(e.target);
+        }
+        counterObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  counters.forEach(c => counterObs.observe(c));
+
+  // Subtle parallax for orbs
+  document.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+    document.querySelectorAll('.orb').forEach((o, i) => {
+      const f = (i % 2 === 0 ? 1 : -1);
+      o.style.transform = `translate(${x * f}px, ${y * f}px)`;
+    });
+  });
+
+
+  // Mobile burger menu
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileBackdrop = document.getElementById('mobileBackdrop');
+
+  const setMobileMenu = (open) => {
+    if (!mobileMenuBtn || !mobileMenu || !mobileBackdrop) return;
+    mobileMenuBtn.classList.toggle('active', open);
+    mobileMenu.classList.toggle('open', open);
+    mobileBackdrop.classList.toggle('open', open);
+    document.body.classList.toggle('menu-open', open);
+    mobileMenuBtn.setAttribute('aria-expanded', String(open));
+    mobileMenuBtn.setAttribute('aria-label', open ? 'Закрити меню' : 'Відкрити меню');
+    mobileMenu.setAttribute('aria-hidden', String(!open));
+  };
+
+  mobileMenuBtn?.addEventListener('click', () => {
+    setMobileMenu(!mobileMenu.classList.contains('open'));
+  });
+  mobileBackdrop?.addEventListener('click', () => setMobileMenu(false));
+  mobileMenu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setMobileMenu(false));
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setMobileMenu(false);
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 768) setMobileMenu(false);
+  });
+
+</script>
+
+</body>
+</html>
